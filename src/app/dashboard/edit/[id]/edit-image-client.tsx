@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ImageItem } from "@/app/action/getImages";
 import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
 
 interface EditImageClientProps {
   id: string;
@@ -55,10 +56,12 @@ export default function EditImageClient({
       const a = document.createElement("a");
       a.style.display = "none";
       a.href = url;
+
       a.download = `image-${imageDetails.author}${width}x${height}.jpg`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
+      toast.success("image downloaded successfully");
     } catch (error) {
       console.error("Failed to download image:", error);
       alert("Failed to download image. Please try again.");
@@ -71,7 +74,7 @@ export default function EditImageClient({
     <div>
       <button
         onClick={() => router.back()}
-        className='mb-4 text-blue-500 hover:underline'
+        className='mb-4 text-emerald-600 hover:underline font-medium'
       >
         &larr; Back to Gallery
       </button>
@@ -132,9 +135,9 @@ export default function EditImageClient({
             <button
               onClick={handleDownload}
               disabled={isLoading}
-              className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-green-300'
+              className='px-4 py-2 bg-emerald-600 text-white rounded hover:bg-green-600 disabled:bg-green-300'
             >
-              {isLoading ? "Downloading..." : "Download Edited Image"}
+              {isLoading ? "Downloading..." : "Download Image"}
             </button>
           </div>
         </div>

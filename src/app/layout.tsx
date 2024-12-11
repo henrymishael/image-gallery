@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { quicksand } from "./fonts";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Imagit",
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body className={`${quicksand.className} antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='light'>
           {children}
+          <Sonner expand={true} position='top-right' />
         </ThemeProvider>
       </body>
     </html>
