@@ -3,11 +3,14 @@ import { getImageDetails } from "@/app/action/getImageDetails";
 import EditImageClient from "./edit-image-client";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>; // params is a Promise
 }
 
 export default async function EditImagePage({ params }: PageProps) {
-  const imageDetails = await getImageDetails(params.id);
+  // Use `await` to unwrap `params`
+  const { id } = await params;
+
+  const imageDetails = await getImageDetails(id);
 
   if (!imageDetails) {
     notFound();
@@ -15,7 +18,7 @@ export default async function EditImagePage({ params }: PageProps) {
 
   return (
     <div className='container mx-auto px-4 py-8'>
-      <EditImageClient id={params.id} initialImageDetails={imageDetails} />
+      <EditImageClient id={id} initialImageDetails={imageDetails} />
     </div>
   );
 }
