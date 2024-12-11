@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { quicksand } from "./fonts";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export const metadata: Metadata = {
   title: "Imagit",
@@ -15,7 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${quicksand.className} antialiased`}>{children}</body>
+      <body className={`${quicksand.className} antialiased`}>
+        <ThemeProvider attribute='class' defaultTheme='light'>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

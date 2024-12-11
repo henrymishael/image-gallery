@@ -8,7 +8,7 @@ export const quicksand = Quicksand({
   subsets: ["latin", "latin-ext", "vietnamese"],
   fallback: ["manrope"],
   preload: true,
-  adjustFontFallback: true,
+  adjustFontFallback: false,
 });
 
 export const inter = Inter({
