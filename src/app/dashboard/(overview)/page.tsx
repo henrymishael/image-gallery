@@ -1,25 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getImages } from "@/app/action/getImages";
+// import { getImages } from "@/app/action/getImages";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SkeletonLoader from "@/components/ui/skeleton";
-
 interface ImageItem {
   id: string;
   author: string;
   width: number;
   height: number;
-  download_url: string;
+  download_url: any;
 }
 
 export default function ImageGallery() {
   const [images, setImages] = useState<ImageItem[]>([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchImages();
@@ -28,8 +28,11 @@ export default function ImageGallery() {
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const newImages = await getImages(page);
-      setImages(newImages);
+      const response = await fetch(
+        `https://picsum.photos/v2/list?page=${page}&limit=12`
+      );
+      const data = await response.json();
+      setImages(data);
     } catch (error) {
       console.error("Error fetching images:", error);
     }

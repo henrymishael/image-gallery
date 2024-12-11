@@ -21,6 +21,7 @@ export default function EditImageClient({
   const [grayscale, setGrayscale] = useState(false);
   const [blur, setBlur] = useState(0);
   const [imageDetails] = useState<ImageItem>(initialImageDetails);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Load saved settings from localStorage
@@ -44,26 +45,33 @@ export default function EditImageClient({
     grayscale ? "?grayscale" : ""
   }${blur > 0 ? `${grayscale ? "&" : "?"}blur=${blur}` : ""}`;
 
-  const handleDownload = () => {
-    // Create an invisible anchor element
-    const link = document.createElement("a");
-    // Set the href to the image URL
-    link.href = imageUrl;
-    // Set the download attribute to suggest the file name for the download
-    link.download = `image-${id}.jpg`; // Customize the file name
-    // Append the link to the body (this is necessary for Firefox)
-    document.body.appendChild(link);
-    // Programmatically click the link to trigger the download
-    link.click();
-    // Remove the link from the document after the download
-    document.body.removeChild(link);
+  const handleDownload = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error("Download failed");
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = `image-${imageDetails.author}${width}x${height}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download image:", error);
+      alert("Failed to download image. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className='container mx-auto px-4 py-8'>
+    <div>
       <button
         onClick={() => router.back()}
-        className='mb-4 text-emerald-500 hover:underline font-medium'
+        className='mb-4 text-blue-500 hover:underline'
       >
         &larr; Back to Gallery
       </button>
@@ -87,7 +95,7 @@ export default function EditImageClient({
                 type='number'
                 value={width}
                 onChange={(e) => setWidth(Number(e.target.value))}
-                className='w-full px-3 py-2 border rounded text-primary outline-emerald-600 caret-emerald-400'
+                className='w-full px-3 py-2 border rounded'
               />
             </div>
             <div>
@@ -96,7 +104,7 @@ export default function EditImageClient({
                 type='number'
                 value={height}
                 onChange={(e) => setHeight(Number(e.target.value))}
-                className='w-full px-3 py-2 border rounded text-primary outline-emerald-600 caret-emerald-400'
+                className='w-full px-3 py-2 border rounded'
               />
             </div>
             <div>
@@ -117,15 +125,16 @@ export default function EditImageClient({
                 value={[blur]}
                 max={10}
                 step={1}
-                onValueChange={(value) => setBlur(value[0])}
+                onValueChange={(value) => setBlur(Number(value))}
                 className='my-8'
               />
             </div>
             <button
               onClick={handleDownload}
-              className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600'
+              disabled={isLoading}
+              className='px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:bg-green-300'
             >
-              Download Image
+              {isLoading ? "Downloading..." : "Download Edited Image"}
             </button>
           </div>
         </div>
