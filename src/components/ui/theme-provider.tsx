@@ -7,25 +7,25 @@ interface ValueObject {
 
 interface ThemeProviderProps {
   /** List of all available theme names */
-  themes?: string[] | undefined;
+  themes?: string[];
   /** Forced theme name for the current page */
-  forcedTheme?: string | undefined;
+  forcedTheme?: string;
   /** Whether to switch between dark and light themes based on prefers-color-scheme */
-  enableSystem?: boolean | undefined;
+  enableSystem?: boolean;
   /** Disable all CSS transitions when switching themes */
-  disableTransitionOnChange?: boolean | undefined;
+  disableTransitionOnChange?: boolean;
   /** Whether to indicate to browsers which color scheme is used (dark or light) for built-in UI like inputs and buttons */
-  enableColorScheme?: boolean | undefined;
+  enableColorScheme?: boolean;
   /** Key used to store theme setting in localStorage */
-  storageKey?: string | undefined;
+  storageKey?: string;
   /** Default theme name (for v0.0.12 and lower the default was light). If `enableSystem` is false, the default theme is light */
-  defaultTheme?: string | undefined;
+  defaultTheme?: string;
   /** HTML attribute modified based on the active theme. Accepts `class` and `data-*` (meaning any data attribute, `data-mode`, `data-color`, etc.) */
-  attribute?: string | "class" | undefined;
+  attribute?: string;
   /** Mapping of theme name to HTML attribute value. Object where key is the theme name and value is the attribute value */
-  value?: ValueObject | undefined;
+  value?: ValueObject;
   /** Nonce string to pass to the inline script for CSP headers */
-  nonce?: string | undefined;
+  nonce?: string;
   /** React children */
   children: React.ReactNode;
 }
